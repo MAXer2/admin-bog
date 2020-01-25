@@ -22,7 +22,8 @@ namespace WindowsFormsApp1
         public static Image BUTTON_IMAGE;
         public static Image BUTTON_BACKGROUND_IMAGE;
         public static Color BUTTON_TEXT_COLOR = Color.Black;
-        public static Color LABEL_COLOR = Color.Black;
+        public static Color LABEL_COLOR = Color.DarkCyan;
+        public static Color PANEL_COLOR = Color.FromArgb(84,156,243);
         public static int size1 = 20;
         public static int size2 = 30;
         /// <summary>
@@ -30,7 +31,7 @@ namespace WindowsFormsApp1
         /// </summary>
         public static void ColorAllButtons(Control panel)
         {
-            foreach (Control ctrl in panel.Controls)
+            foreach (Control ctrl in panel.Controls  )
             {
                 try
                 {
@@ -53,6 +54,21 @@ namespace WindowsFormsApp1
                         Label lbl = (Label)ctrl;
                         lbl.ForeColor = Vars.LABEL_COLOR;
                         lbl.Font = Vars.LABEL_FONT;
+                    }
+                    if (ctrl is Panel)
+                    {
+                        Panel pnl = (Panel)ctrl;
+                        pnl.BackColor = Vars.PANEL_COLOR;
+                    }
+                    if (ctrl is TabControl)
+                    {
+                        TabControl pnl = (TabControl)ctrl;
+                        pnl.BackColor = Vars.PANEL_COLOR;
+
+                        foreach (TabPage ctrl2 in pnl.TabPages)
+                        {
+                            ColorAllButtons(ctrl2);
+                        }
                     }
                 }
                 catch (Exception)
