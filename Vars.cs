@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
 
 namespace WindowsFormsApp1
 {
@@ -13,7 +14,7 @@ namespace WindowsFormsApp1
         /// <summary>
         /// Цвет всех кнопок
         /// </summary>
-        public static Color BUTTON_COLOR = Color.Aqua;
+        public static Color BUTTON_COLOR = Color.FromArgb(128, 0, 0);
         /// <summary>
         /// Шрифт всех кнопок
         /// </summary>
@@ -29,6 +30,100 @@ namespace WindowsFormsApp1
         /// <summary>
         /// Поменять цвета всех кнопок
         /// </summary>
+
+        public static string CONNECTION_STRING =
+           "SslMode=none;" +
+           "Server=db4free.net;" +
+           "database=ingenerka;" +
+           "port=3306;" +
+           "uid=ingenerka;" +
+           "pwd=Beavis1989;" +
+           "old guids=true;";
+        public static MySqlConnection CONN;
+
+        /// <summary>
+        /// Select-запрос
+        /// </summary>
+        /// <param name="sqlzapros"></param>
+        /// <returns></returns>
+        public static List<string> Select(string sqlzapros)
+        {
+            List<string> res = new List<string>();
+            MySqlCommand q = new MySqlCommand(sqlzapros, CONN);
+            MySqlDataReader r = q.ExecuteReader();
+
+            while (r.Read())
+            {
+                for (int inc = 0; inc < r.FieldCount; inc++)
+                {
+                    res.Add(r[inc].ToString());
+                }
+            }
+            r.Close();
+
+            return res;
+        }
+        /// <summary>
+        /// Update-запрос
+        /// </summary>
+        public static void Update(string zapros)
+        {
+            MySqlCommand q = new MySqlCommand(zapros, CONN);
+            MySqlDataReader r = q.ExecuteReader();
+            r.Close();
+        }
+
+        /// <summary>
+        /// Читаем дизайн из базы
+        /// </summary>
+        public static void ReadDesign()
+        {
+            List<string> DefaultDesign = Select("SELECT Parameter, Value, objectType FROM DefaultDesign");
+            
+
+            for (int i =0; i < DefaultDesign.Count; i = i + 3)
+            {
+                try
+                {
+                    if (DefaultDesign[i] == "Button_Color")
+                    {
+                        BUTTON_COLOR = Color.FromArgb(
+                            Convert.ToInt32(DefaultDesign[i + 1])
+                        );
+                    }
+                    if (DefaultDesign[i] == "Label_Font")
+                    {
+                        string[] parts = DefaultDesign[i + 1].Split(new char[] { ',' });
+                        LABEL_FONT = new Font(parts[0], Convert.ToInt32(parts[1]));                
+                    }
+                    if (DefaultDesign[i] == "Button_Font")
+                    {
+                        string[] parts1 = DefaultDesign[i+1].Split(new char[] { ',' });
+                        BUTTON_FONT = new Font(parts1[0], (float)(Convert.ToDouble(parts1[1])));
+                    }
+                    if (DefaultDesign[i] == "Button_Font_Color")
+                    {
+                        BUTTON_TEXT_COLOR = Color.FromArgb(
+                            Convert.ToInt32(DefaultDesign[i + 1]));
+                    }
+                    if (DefaultDesign[i] == "Label_Font_Color")
+                    {
+                      
+
+                      LABEL_COLOR = Color.FromArgb(
+                            Convert.ToInt32(DefaultDesign[i + 1]));
+                    }
+                    if (DefaultDesign[i] == "Panel_Color")
+                    {
+                      PANEL_COLOR = Color.FromArgb(
+                              Convert.ToInt32(DefaultDesign[i + 1]));
+                    }
+                }
+                catch (Exception) { }
+            }
+        }
+       
+
         public static void ColorAllButtons(Control panel)
         {
             foreach (Control ctrl in panel.Controls  )
