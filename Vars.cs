@@ -118,6 +118,14 @@ namespace WindowsFormsApp1
                       PANEL_COLOR = Color.FromArgb(
                               Convert.ToInt32(DefaultDesign[i + 1]));
                     }
+                    if (DefaultDesign[i] == "Button_Background_Image")
+                    {
+                        PictureBox pb1 = new PictureBox();
+                        pb1.Load(@"..\..\images\FON\" + DefaultDesign[i + 1].ToString());
+
+                        BUTTON_BACKGROUND_IMAGE = pb1.Image;
+                    }
+
                 }
                 catch (Exception) { }
             }

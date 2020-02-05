@@ -32,7 +32,8 @@ namespace WindowsFormsApp1
                 Vars.CONN.Open();
             }
 
-            Application.Run(new Form1());
+            Vars.ReadDesign();
+            Application.Run(new DesignMenu());
 
             Vars.CONN.Close();
         }

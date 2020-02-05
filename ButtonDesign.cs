@@ -161,7 +161,7 @@ namespace WindowsFormsApp1
             openFileDialog1.RestoreDirectory = false;
             DirectoryInfo di1 = new DirectoryInfo(@"..\..\images\FON");
             openFileDialog1.InitialDirectory = di1.FullName;
-
+         
             if (openFileDialog1.ShowDialog() != DialogResult.Cancel)
             {
                 pictureBox1.Load(openFileDialog1.FileName);
@@ -170,7 +170,11 @@ namespace WindowsFormsApp1
                 Vars.Update("UPDATE DefaultDesign SET Value='" +
                     Path.GetFileName(openFileDialog1.FileName) +
                     "' WHERE Parameter = 'Button_Background_Image' AND objectType='System.Windows.Forms.Button'");
-
+                try
+                {
+                    File.Copy(openFileDialog1.FileName, @"..\..\images\FON\" + Path.GetFileName(openFileDialog1.FileName));
+                }
+                catch (Exception) { }
             }
         }
 
@@ -285,6 +289,11 @@ namespace WindowsFormsApp1
         private void BunifuFlatButton16_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void ButtonDesign_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
